@@ -1,6 +1,6 @@
 # An isometric tile based renderer for react
 
-![Sample](https://github.com/sajitkhadka/react-tile-render/blob/master/src/assets/img/output.png?raw=true)
+![Sample](https://github.com/sajitkhadka/react-tile-render/blob/master/src/assets/img/output.PNG)
 
 ## Steps
 
