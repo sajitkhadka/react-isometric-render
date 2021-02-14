@@ -1,12 +1,7 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 
 import GameObjects from "../render/GameObjects";
 import RenderObjects from "../render/RenderObjects";
-
-import background from "../../assets/sprites/background.jpg";
-
-import image1 from "../../assets/img/2d.png";
-// const Sprites = GameObjects(image1);
 
 function Sprite({ number, spriteSheet, ...props }) {
   const ShowSprite = GameObjects(spriteSheet)[number];
@@ -14,14 +9,11 @@ function Sprite({ number, spriteSheet, ...props }) {
 }
 
 export default function Map({
-  // tiles,
-  // tileSet,
-  size,
-  setTiles,
   activeTile,
-  editMap,
   tileMap,
   image,
+  zoom = 1,
+  background,
 }) {
   // console.log(tileMap);
 
@@ -37,9 +29,12 @@ export default function Map({
     };
   };
 
+  // const { docPosition } = usePanning(docRef.current);
+
   // const [image, setImage] = useState(tileMap.tilesets[0]?.image);
 
   const [pWorld, setPWorld] = useState([]);
+  const [pWorld2, setPWorld2] = useState([]);
 
   useEffect(() => {
     // for (let y = 0; y < vWorldSize.y; y++) {
@@ -64,6 +59,8 @@ export default function Map({
     return (x - x1) * (y2 - y1) - (y - y1) * (x2 - x1);
   };
 
+  // console.log(pWorld);
+
   const tiles = useMemo(() => {
     let tiles = [];
     for (let y = 0; y < vWorldSize.y; y++) {
@@ -76,21 +73,29 @@ export default function Map({
     return tiles;
   }, [pWorld]);
 
+  let dimension = {
+    x: vTileSize.x * vWorldSize.x,
+    y: vTileSize.y * vWorldSize.y,
+  };
+
+  // console.log(dimension);
+
   return (
     <div
       style={{
         boxSizing: "border-box",
-        width: size.width,
-        height: size.height,
         position: "relative",
         border: "1px solid gray",
         backgroundImage: "url(" + background + ")",
         backgroundRepeat: "no-repeat",
+        width: dimension.x,
+        height: dimension.y + 64,
+        zoom: `${zoom * 100}%`,
       }}
       onMouseMove={(e) => {
         var bounds = e.currentTarget.getBoundingClientRect();
-        var mx = e.clientX - bounds.left;
-        var my = e.clientY - bounds.top;
+        var mx = e.clientX / zoom - bounds.left;
+        var my = e.clientY / zoom - bounds.top;
 
         let cx = parseInt(mx / vTileSize.x);
         let cy = parseInt(my / vTileSize.y);
@@ -140,19 +145,6 @@ export default function Map({
         setVScreen(toScreen(newVSelected.x, newVSelected.y));
       }}
     >
-      {/* <RenderObjects left={10} top={10}></RenderObjects> */}
-      {/* {(() => {
-        let tiles = [];
-        for (let y = 0; y < vWorldSize.y; y++) {
-          for (let x = 0; x < vWorldSize.x; x++) {
-            let position = toScreen(x, y);
-            tiles.push({ position, sprite: pWorld[y * vWorldSize.x + x] });
-            // console.log(y * vWorldSize.x + x);
-          }
-        }
-        // console.log(tiles);
-        return tiles;
-      })() */}
       {tiles.map((tiles, i) => {
         // console.log(i);
         return (
@@ -168,27 +160,37 @@ export default function Map({
         );
       })}
 
-      {/* {(() => {
+      {(() => {
         let tiles = [];
         for (let y = 0; y < vWorldSize.y; y++) {
           for (let x = 0; x < vWorldSize.x; x++) {
             let position = toScreen(x, y);
-            tiles.push({ position, sprite: pWorld[y * vWorldSize.x + x] });
+            tiles.push({
+              position,
+              sprite: pWorld2[y * vWorldSize.x + x]?.tile,
+              spriteSheet: pWorld2[y * vWorldSize.x + x]?.image,
+            });
             // console.log(y * vWorldSize.x + x);
           }
         }
         return tiles;
-      })().map((tiles, i) => (
-        <RenderObjects
-          left={tiles.position.x}
-          top={tiles.position.y - vTileSize.y}
-          key={i}
-        >
-          <div className="sprite-hover-sheet">
-            <Sprite number={tiles.sprite || 3} spriteSheet={image1} />
-          </div>
-        </RenderObjects>
-      ))} */}
+      })().map((tiles, i) => {
+        // console.log(tiles.sprite);
+        return tiles.sprite ? (
+          <RenderObjects
+            left={tiles.position.x}
+            top={tiles.position.y - vTileSize.y}
+            key={i}
+          >
+            <div className="sprite-hover-sheet">
+              <Sprite
+                number={tiles.sprite || 3}
+                spriteSheet={tiles.spriteSheet || image}
+              />
+            </div>
+          </RenderObjects>
+        ) : null;
+      })}
 
       <RenderObjects left={vScreen.x} top={vScreen.y - vTileSize.y}>
         <div className="sprite-hover-sheet">
@@ -197,8 +199,10 @@ export default function Map({
               number={activeTile.tile}
               spriteSheet={activeTile.spriteSheet}
               onClick={() => {
-                setPWorld((prev) => {
+                console.log(activeTile);
+                setPWorld2((prev) => {
                   prev[vSelected.y * vWorldSize.x + vSelected.x] = activeTile;
+                  console.log(vSelected.y * vWorldSize.x + vSelected.x);
                   return prev;
                 });
               }}
@@ -214,5 +218,6 @@ export default function Map({
         </div>
       </RenderObjects>
     </div>
+    // {/* </div> */}
   );
 }

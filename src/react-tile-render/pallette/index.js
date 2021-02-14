@@ -6,13 +6,7 @@ import GameObjects from "../render/GameObjects";
 
 // const Bay = Objects["Bay"];
 
-export default function palette({
-  tileSet,
-  position,
-  size,
-  activeTile,
-  setActiveTile,
-}) {
+export default function palette({ tileSet, size, setActiveTile, zoom = 1 }) {
   const Sprites = GameObjects(tileSet);
   const { width, height } = size;
   const tiles = [];
@@ -33,15 +27,13 @@ export default function palette({
     <div
       id="palette"
       style={{
-        // position: "absolute",
+        boxSizing: "border-box",
+        position: "relative",
         border: "1px solid black",
-        top: "200px",
-        right: "200px",
         zIndex: 100,
         backgroundColor: "white",
-        width: "1152px",
-        // height: "128px",
         margin: "30px auto",
+        zoom: `${zoom * 100}%`,
       }}
     >
       <div style={{ display: "flex", flexWrap: "wrap" }}>

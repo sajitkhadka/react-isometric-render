@@ -1,60 +1,61 @@
-import React, { useState, useEffect, useRef, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import image1 from "./assets/img/2d.png";
-// import spring from "./assets/sprites/3d.png";
 import { Palette } from "./react-tile-render";
-// import useDraggable from "./hooks/useDraggable";
 import Map from "./react-tile-render";
 import "./assets/css/styles.css";
-// import tilemap from "./tilemap.json";
 import map2 from "./untitled.json";
 import image from "./assets/img/2d.png";
+import background from "./assets/sprites/background.jpg";
 
 function App(props) {
   const [activeTile, setActiveTile] = useState(null);
   const [tiles, setTiles] = useState([]);
   const [mapSize, setMapSize] = useState({
     width: 1152,
-    height: 576,
+    height: 700,
   });
-  // console.log(map2.)
-  const [selectedTile, setSelectedTile] = useState(null);
-  // const { position } = useDraggable("handle");
-  //check if map is getting edited
-  const [allBays, setAllBays] = useState([]);
+
+  const [zoom, setZoom] = useState((window.screen.width / 1600).toFixed(1));
+  // console.log(zoom);
+  console.log(window.clientW);
+
+  useEffect(() => {
+    window.onresize = function () {
+      setZoom((window.screen.width / 1600).toFixed(1));
+    };
+  }, []);
 
   return (
     <div className="content" style={{ backgroundColor: "#EDF5E1" }}>
       <div
         style={{
           position: "relative",
-          // width: window.innerWidth,
-          // height: window.innerHeight,
-          // backgroundColor: "grey",
-          overflow: "hidden",
-          // border: "1px solid black",
           marginBottom: "50px",
           display: "flex",
           justifyContent: "space-around",
+          width: "100%",
+          height: mapSize.height * zoom,
         }}
       >
         <Map
-          tiles={tiles}
-          size={mapSize}
           activeTile={activeTile}
-          setTiles={setTiles}
           tileMap={map2}
           image={image}
+          zoom={zoom}
+          background={background}
         />
       </div>
-      <Palette
-        tileSet={image1}
-        // position={position}
-        activeTile={activeTile}
-        setActiveTile={setActiveTile}
-        size={{ height: 128, width: 64 }}
-        // size={{ height: 128, width: 64 }}
-      />
+      <div style={{ width: "80%", margin: "50px auto", height: 576 }}>
+        <Palette
+          tileSet={image1}
+          activeTile={activeTile}
+          setActiveTile={setActiveTile}
+          size={{ height: 128, width: 64 }}
+          zoom={zoom}
+        />
+      </div>
     </div>
+    // </div>
   );
 }
 
