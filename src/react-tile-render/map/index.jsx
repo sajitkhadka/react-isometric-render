@@ -63,6 +63,7 @@ export default React.memo(function Render({
         width: dimension.x,
         height: dimension.y + 64,
         zoom: `${zoom * 100}%`,
+        MozTransform: `scale(${zoom})`,
       }}
       onClick={() => {
         console.log("clicked");

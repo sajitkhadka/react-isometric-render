@@ -41,6 +41,7 @@ export default function palette({
         backgroundColor: "white",
         margin: "30px auto",
         zoom: `${zoom * 100}%`,
+        MozTransform: `scale(${zoom})`,
       }}
     >
       <div style={{ display: "flex", flexWrap: "wrap" }}>
