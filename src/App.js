@@ -4,12 +4,12 @@ import { Palette, RenderObjects } from "./react-tile-render";
 import Render from "./react-tile-render";
 import "./assets/css/styles.css";
 import map2 from "./untitled.json";
-import multipleLayers from "./multipleLayers.json";
+import tileMap from "./tileMap.json";
 import image from "./assets/img/2d.png";
 import house from "./assets/img/house.png";
 import background from "./assets/sprites/background.jpg";
 import { Sprite } from "./react-tile-render/map";
-import Map from "./react-tile-render/map/Map";
+import Layer from "./react-tile-render/map/Layer";
 import Object from "./react-tile-render/map/Object";
 
 function App(props) {
@@ -21,9 +21,6 @@ function App(props) {
   });
 
   const [zoom, setZoom] = useState((window.screen.width / 1600).toFixed(1));
-  // console.log(zoom);
-  // console.log(window.clientW);
-
   useEffect(() => {
     window.onresize = function () {
       setZoom((window.screen.width / 1600).toFixed(1));
@@ -32,13 +29,13 @@ function App(props) {
 
   const [allObjects, setAllObjects] = useState([]);
 
-  // console.log(allObjects);
   return (
     <div className="content" style={{ backgroundColor: "#EDF5E1" }}>
       <div
         style={{
           position: "relative",
           marginBottom: "50px",
+          paddingTop: "50px",
           display: "flex",
           justifyContent: "space-around",
           width: "100%",
@@ -47,13 +44,23 @@ function App(props) {
       >
         <Render
           activeTile={activeTile}
-          tileMap={multipleLayers}
+          tileMap={tileMap}
+          tileSize={{ x: 64, y: 32 }}
+          origin={{ y: 1, x: tileMap.width / 2 }}
+          worldSize={{ x: tileMap.width, y: tileMap.height }}
           image={image}
           zoom={zoom}
           background={background}
           addTile={(t) => {
             // console.log(t);
             setAllObjects((prev) => {
+              let old = [...prev];
+              let existing = old.find((o) => o.x === t.x && o.y === t.y);
+              if (existing) {
+                existing.image = t.image;
+                existing.tile = t.tile;
+                return old;
+              }
               return [
                 ...prev,
                 {
@@ -71,26 +78,19 @@ function App(props) {
             console.log(target);
           }}
         >
-          <Map
-            // tileMap={[
-            //   { x: 10, y: 10, spriteSheet: image, tile: 25 },
-            //   { x: 10, y: 9, spriteSheet: image, tile: 25 },
-            // ]}
-            layer={0}
-            image={image}
-            tileMap={multipleLayers}
+          <Layer
+            map={tileMap.layers[0].data}
+            spriteSheet={image}
+            tileSize={{ x: 64, y: 32 }}
+            origin={{ x: 10, y: 1 }}
+            worldSize={{ x: tileMap.width, y: tileMap.height }}
           />
-          {/* <Object x={10} y={8} tile={25} spriteSheet={image} /> */}
-
-          {/* </Map> */}
-          <Map
-            // tileMap={[
-            //   { x: 10, y: 10, spriteSheet: image, tile: 25 },
-            //   { x: 10, y: 9, spriteSheet: image, tile: 25 },
-            // ]}
-            layer={1}
-            image={image}
-            tileMap={multipleLayers}
+          <Layer
+            map={tileMap.layers[1].data}
+            spriteSheet={image}
+            tileSize={{ x: 64, y: 32 }}
+            origin={{ x: 10, y: 1 }}
+            worldSize={{ x: tileMap.width, y: tileMap.height }}
           >
             {allObjects.map((a, i) => {
               return (
@@ -105,20 +105,7 @@ function App(props) {
                 />
               );
             })}
-            {/* <Object x={11} y={8} tile={26} spriteSheet={image} /> */}
-          </Map>
-
-          {/* <RenderObjects x={5} y={5}>
-            <div className="sprite-hover-sheet">
-              <Sprite number={5} spriteSheet={image} />
-            </div>
-          </RenderObjects> */}
-
-          {/* <RenderObjects x={10} y={10}>
-            <div className="sprite-hover-sheet">
-              <Sprite number={0} spriteSheet={image} />
-            </div>
-          </RenderObjects> */}
+          </Layer>
         </Render>
       </div>
       {/* <div style={{ width: "80%", margin: "50px auto", height: 128 }}>
