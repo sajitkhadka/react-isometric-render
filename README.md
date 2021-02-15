@@ -4,7 +4,7 @@
 
 A fun project where I wanted to learn how isometric tile system works and also wanted to see if how React's virtual dom would react to rendering multiple components at a time. And I am amazed to see the result.
 
-![Sample](https://github.com/sajitkhadka/react-tile-render/blob/master/src/assets/img/output.png?raw=true)
+![Sample](https://github.com/sajitkhadka/react-tile-render/blob/master/src/assets/img/output.PNG)
 
 ## WARNING!
 
