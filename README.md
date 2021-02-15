@@ -2,6 +2,10 @@
 
 ![Sample](https://github.com/sajitkhadka/react-tile-render/blob/master/src/assets/img/output.png?raw=true)
 
+## WARNING!
+
+This is completely based on browser dom(nothing related to CANVAS). Hence, if it is requires multiple re-rendering then it is highly recommended to use html Canvas as this will be painfully slow.
+
 ## Steps
 
 `npm install npm start`

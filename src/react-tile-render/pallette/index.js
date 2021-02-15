@@ -6,15 +6,22 @@ import GameObjects from "../render/GameObjects";
 
 // const Bay = Objects["Bay"];
 
-export default function palette({ tileSet, size, setActiveTile, zoom = 1 }) {
-  const Sprites = GameObjects(tileSet);
+export default function palette({
+  tileSet,
+  size,
+  setActiveTile,
+  zoom = 1,
+  tHeight,
+  tWidth,
+}) {
+  const Sprites = GameObjects(tileSet, tHeight, tWidth);
   const { width, height } = size;
   const tiles = [];
   let id = 0;
 
-  for (let y = 0; y < height; y = y + 32) {
+  for (let y = 0; y < height; y = y + tHeight / 2) {
     const row = [];
-    for (let x = 0; x < width; x = x + 32) {
+    for (let x = 0; x < width; x = x + tWidth / 2) {
       row.push({
         x,
         y,
@@ -41,7 +48,12 @@ export default function palette({ tileSet, size, setActiveTile, zoom = 1 }) {
           return (
             <Sprite
               onClick={() => {
-                setActiveTile({ tile: i, spriteSheet: tileSet });
+                setActiveTile({
+                  tile: i,
+                  spriteSheet: tileSet,
+                  height: tHeight,
+                  width: tWidth,
+                });
               }}
               hover={true}
               key={i}

@@ -1,8 +1,10 @@
 import React, { Children } from "react";
 
-export default function RenderObjects({ children, top, left, together }) {
+function RenderObjects({ children, top, left, together, onClick }) {
   return !together ? (
-    <div style={{ position: "absolute", top, left }}>{children}</div>
+    <div style={{ position: "absolute", top, left }} onClick={onClick}>
+      {children}
+    </div>
   ) : (
     Children.toArray(children).map((child, i) => {
       return (
@@ -13,3 +15,6 @@ export default function RenderObjects({ children, top, left, together }) {
     })
   );
 }
+
+RenderObjects.displayName = "RenderObjects";
+export default RenderObjects;
