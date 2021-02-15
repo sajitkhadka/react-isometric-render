@@ -1,8 +1,6 @@
-# An isometric tile based renderer for react(no Canvas)
+# An isometric tile based renderer for react(no Canvas) [DEMO](https://wizardly-kilby-4b9379.netlify.app/)
 
-[DEMO](https://wizardly-kilby-4b9379.netlify.app/)
-
-A fun project where I wanted to learn how isometric tile system works and also wanted to see if how React's virtual dom would react to rendering multiple components at a time. And I am amazed to see the result.
+A fun project where I wanted to learn how isometric tile system works and also wanted to see how React's virtual dom would react to rendering multiple components at a time. And I am amazed to see the result.
 
 ![Sample](https://github.com/sajitkhadka/react-tile-render/blob/master/src/assets/img/output.PNG)
 
